@@ -2,6 +2,8 @@ use std::env;
 use std::fs;
 use std::io::{self, Write};
 
+use codecrafters_interpreter::scan::lexemes::Lexemes;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 3 {
@@ -21,10 +23,8 @@ fn main() {
             // Uncomment this block to pass the first stage
             if !file_contents.is_empty() {
                 for c in file_contents.chars() {
-                    if c == '(' {
-                        println!("LEFT_PAREN ( null");
-                    } else if c == ')' {
-                        println!("RIGHT_PAREN ) null");
+                    if let Some(l) = Lexemes::from_char(c) {
+                        l.execute();
                     }
                 }
             } else {
