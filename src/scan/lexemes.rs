@@ -41,8 +41,9 @@ lexemes_methods! {
         Plus => '+' => |_| println!("PLUS + null"),
         Minus => '-' => |_| println!("MINUS - null"),
         Semicolon => ';' => |_| println!("SEMICOLON ; null"),
-        Equal => '=' => |scanner| handle::handle_equal(scanner),
-        Bang => '!' => |scanner| handle::handle_bang(scanner),
-
+        Equal => '=' => |scanner| handle::equal(scanner),
+        Bang => '!' => |scanner| handle::bang(scanner),
+        Greater => '>' => |scanner| handle::greater(scanner),
+        Less => '<' => |scanner| handle::less(scanner),
     }
 }
