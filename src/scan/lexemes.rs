@@ -1,3 +1,5 @@
+use super::handle;
+use super::scanner::Scanner;
 macro_rules! lexemes_methods {
     ($name:ident {
         $(
@@ -18,9 +20,9 @@ macro_rules! lexemes_methods {
                 }
             }
 
-            pub fn execute(&self) {
+            pub fn execute(&self, scanner: &mut Scanner) {
                 match self {
-                    $(Self::$variant => $method),*
+                    $(Self::$variant => $method(scanner)),*
                 }
             }
         }
@@ -29,17 +31,17 @@ macro_rules! lexemes_methods {
 
 lexemes_methods! {
     Lexemes {
-        LeftParenthesis => '(' => println!("LEFT_PAREN ( null"),
-        RightParenthesis => ')' => println!("RIGHT_PAREN ) null"),
-        LeftBrace => '{' => println!("LEFT_BRACE {} null",'{'),
-        RightBrace => '}' => println!("RIGHT_BRACE {} null",'}'),
-        Star => '*' => println!("STAR * null"),
-        Dot => '.' => println!("DOT . null"),
-        Comma => ',' => println!("COMMA , null"),
-        Plus => '+' => println!("PLUS + null"),
-        Minus => '-' => println!("MINUS - null"),
-        // Div => '/' => println!("DIV / null"),
-        Semicolon => ';' => println!("SEMICOLON ; null"),
+        LeftParenthesis => '(' => |_| println!("LEFT_PAREN ( null"),
+        RightParenthesis => ')' => |_| println!("RIGHT_PAREN ) null"),
+        LeftBrace => '{' => |_| println!("LEFT_BRACE {} null",'{'),
+        RightBrace => '}' => |_| println!("RIGHT_BRACE {} null",'}'),
+        Star => '*' => |_| println!("STAR * null"),
+        Dot => '.' => |_| println!("DOT . null"),
+        Comma => ',' => |_| println!("COMMA , null"),
+        Plus => '+' => |_| println!("PLUS + null"),
+        Minus => '-' => |_| println!("MINUS - null"),
+        Semicolon => ';' => |_| println!("SEMICOLON ; null"),
+        Equal => '=' => |scanner| handle::equal(scanner),
 
     }
 }
