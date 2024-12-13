@@ -3,7 +3,8 @@ use std::fs;
 use std::io::{self, Write};
 use std::process::exit;
 
-use codecrafters_interpreter::scan::lexemes::Lexemes;
+use codecrafters_interpreter::pkg::code::ExitCode;
+use codecrafters_interpreter::scan::scanner::Scanner;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -11,8 +12,6 @@ fn main() {
         writeln!(io::stderr(), "Usage: {} tokenize <filename>", args[0]).unwrap();
         return;
     }
-
-    let mut exit_code = 0;
 
     let command = &args[1];
     let filename = &args[2];
@@ -23,27 +22,12 @@ fn main() {
                 writeln!(io::stderr(), "Failed to read file {}", filename).unwrap();
                 String::new()
             });
-            // Uncomment this block to pass the first stage
-            if !file_contents.is_empty() {
-                file_contents.lines().enumerate().for_each(|(line_num,line)| for c in line.chars() {
-                    if let Some(l) = Lexemes::from_char(c) {
-                        l.execute();
-                    }else {
-                        eprintln!("[line {}] Error: Unexpected character: {}", line_num+1, c);
-                        exit_code = 65;
-                    }
-                });
-                println!("EOF  null");
 
-                if exit_code != 0 {
-                    exit(exit_code)
-                }
-                return;
-            } else {
-                println!("EOF  null");
-                // Placeholder, remove this line when implementing the scanner
+            let mut scanner = Scanner::new(&file_contents);
+
+            if let ExitCode::Exit = scanner.scan_tokens() {
+                exit(ExitCode::Exit.into());
             }
-            
         }
         _ => {
             writeln!(io::stderr(), "Unknown command: {}", command).unwrap();
