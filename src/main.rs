@@ -1,6 +1,7 @@
 use std::env;
 use std::fs;
 use std::io::{self, Write};
+use std::process::exit;
 
 use codecrafters_interpreter::scan::lexemes::Lexemes;
 
@@ -10,6 +11,8 @@ fn main() {
         writeln!(io::stderr(), "Usage: {} tokenize <filename>", args[0]).unwrap();
         return;
     }
+
+    let mut exit_code = 0;
 
     let command = &args[1];
     let filename = &args[2];
@@ -22,19 +25,30 @@ fn main() {
             });
             // Uncomment this block to pass the first stage
             if !file_contents.is_empty() {
-                for c in file_contents.chars() {
+                file_contents.lines().enumerate().for_each(|(line_num,line)| for c in line.chars() {
                     if let Some(l) = Lexemes::from_char(c) {
                         l.execute();
+                    }else {
+                        eprintln!("[line {}] Error: Unexpected character: {}", line_num+1, c);
+                        exit_code = 65;
                     }
+                });
+                println!("EOF  null");
+
+                if exit_code != 0 {
+                    exit(exit_code)
                 }
+                return;
             } else {
+                println!("EOF  null");
                 // Placeholder, remove this line when implementing the scanner
             }
+            
         }
         _ => {
             writeln!(io::stderr(), "Unknown command: {}", command).unwrap();
             return;
         }
     }
-    println!("EOF  null");
+    
 }

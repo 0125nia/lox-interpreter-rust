@@ -38,7 +38,7 @@ lexemes_methods! {
         Comma => ',' => println!("COMMA , null"),
         Plus => '+' => println!("PLUS + null"),
         Minus => '-' => println!("MINUS - null"),
-        Div => '/' => println!("DIV / null"),
+        // Div => '/' => println!("DIV / null"),
         Semicolon => ';' => println!("SEMICOLON ; null"),
 
     }
