@@ -46,5 +46,7 @@ lexemes_methods! {
         Greater => '>' => |scanner| handle::greater(scanner),
         Less => '<' => |scanner| handle::less(scanner),
         Division => '/' => |scanner| handle::division(scanner),
+        Tab => '\t' => |_| {},
+        Space => ' ' => |_| {},
     }
 }
