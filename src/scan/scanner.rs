@@ -1,4 +1,5 @@
 use crate::pkg::code::ExitCode;
+use crate::pkg::util;
 use std::{iter::Peekable, str::Chars};
 
 use crate::scan::handle;
@@ -38,6 +39,8 @@ impl<'a> Scanner<'a> {
     fn process_non_lexeme(&mut self, c: char) {
         if c.is_ascii_digit() {
             handle::number(self, c);
+        } else if util::is_aplha(c) {
+            handle::identifier(self, c);
         } else {
             eprintln!(
                 "[line {}] Error: Unexpected character: {}",

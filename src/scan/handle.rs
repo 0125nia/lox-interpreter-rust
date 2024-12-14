@@ -1,4 +1,4 @@
-use crate::pkg::code::ExitCode;
+use crate::pkg::{code::ExitCode, util};
 
 use super::scanner::Scanner;
 
@@ -66,11 +66,20 @@ pub fn number(scanner: &mut Scanner, c: char) {
             break;
         }
     }
-    let num = number.parse::<f64>().unwrap();
-    let formatted_number = if num.fract() == 0.0 {
-        format!("{:.1}", num)
-    } else {
-        format!("{}", num)
-    };
+    let formatted_number = util::format_string_to_f64(&number);
     println!("NUMBER {} {}", number, formatted_number);
+}
+
+pub fn identifier(scanner: &mut Scanner, c: char) {
+    let mut identifier = String::new();
+    identifier.push(c);
+    while let Some(&ch) = scanner.chars.peek() {
+        if util::is_aplha_digit(ch) {
+            identifier.push(ch);
+            scanner.chars.next();
+        } else {
+            break;
+        }
+    }
+    println!("IDENTIFIER {} null", identifier);
 }
