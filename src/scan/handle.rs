@@ -1,3 +1,7 @@
+
+
+use crate::pkg::code::ExitCode;
+
 use super::scanner::Scanner;
 
 macro_rules! lexemes_handle {
@@ -31,4 +35,25 @@ pub fn division(scanner: &mut Scanner) {
         return;
     }
     println!("SLASH / null");
+}
+
+pub fn quotation(scanner: &mut Scanner) {
+    let mut string_content = String::new();
+    let mut flag = false;
+    while let Some(ch) = scanner.chars.next() {
+        if ch == '"'{
+            flag = true;
+            break;
+        }
+        if let Some('\n') = scanner.chars.peek() {
+            break;
+        }
+        string_content.push(ch);
+    }
+    if flag {
+        println!("STRING \"{}\" {}", string_content,string_content);
+    } else {
+        eprintln!("[line {}] Error: Unterminated string.",scanner.line_num);
+        scanner.exit_code = ExitCode::Exit;
+    }
 }

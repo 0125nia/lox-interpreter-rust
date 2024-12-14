@@ -1,4 +1,5 @@
 #[repr(i32)]
+#[derive(Clone)]
 pub enum ExitCode {
     Exit = 65,
     Continue = 0,

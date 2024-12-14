@@ -48,5 +48,6 @@ lexemes_methods! {
         Division => '/' => |scanner| handle::division(scanner),
         Tab => '\t' => |_| {},
         Space => ' ' => |_| {},
+        Quotation => '"' => |scanner| handle::quotation(scanner),
     }
 }
