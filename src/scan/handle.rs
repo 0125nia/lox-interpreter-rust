@@ -1,6 +1,6 @@
 use crate::pkg::{code::ExitCode, util};
 
-use super::scanner::Scanner;
+use super::{keyword::Keyword, scanner::Scanner};
 
 macro_rules! lexemes_handle {
     ($name:ident, $token_name:expr, $lexeme:expr, $follow_token_name:expr, $follow_lexeme:expr) => {
@@ -81,5 +81,8 @@ pub fn identifier(scanner: &mut Scanner, c: char) {
             break;
         }
     }
-    println!("IDENTIFIER {} null", identifier);
+    match identifier.parse::<Keyword>() {
+        Ok(keyword) => println!("{:?} {} null", keyword, identifier),
+        _ => println!("IDENTIFIER {} null", identifier),
+    }
 }
