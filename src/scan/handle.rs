@@ -1,6 +1,5 @@
 use super::scanner::Scanner;
 
-
 macro_rules! lexemes_handle {
     ($name:ident, $token_name:expr, $lexeme:expr, 
         $follow_token_name:expr, $follow_lexeme:expr) => {
@@ -19,3 +18,17 @@ lexemes_handle!(equal, "EQUAL", '=', "EQUAL_EQUAL", '=');
 lexemes_handle!(bang, "BANG", '!', "BANG_EQUAL", '=');
 lexemes_handle!(greater, "GREATER", '>', "GREATER_EQUAL", '=');
 lexemes_handle!(less, "LESS", '<', "LESS_EQUAL", '=');
+
+pub fn division(scanner: &mut Scanner) {
+    if let Some('/') = scanner.chars.peek() {
+        scanner.chars.next();
+        while let Some(&ch) = scanner.chars.peek() {
+            if ch == '\n' {
+               break;
+            }
+            scanner.chars.next();
+        }
+        return;
+    }
+    println!("SLASH / null");
+}

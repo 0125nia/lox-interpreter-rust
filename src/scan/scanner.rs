@@ -21,6 +21,7 @@ impl<'a> Scanner<'a> {
         while let Some(c) = self.chars.next() {
             if c == '\n' {
                 self.line_num += 1;
+                continue;
             }
             if let Some(l) = Lexemes::from_char(c) {
                 l.execute(self);
