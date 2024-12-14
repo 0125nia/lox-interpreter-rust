@@ -1,15 +1,12 @@
-
-
 use crate::pkg::code::ExitCode;
 
 use super::scanner::Scanner;
 
 macro_rules! lexemes_handle {
-    ($name:ident, $token_name:expr, $lexeme:expr, 
-        $follow_token_name:expr, $follow_lexeme:expr) => {
+    ($name:ident, $token_name:expr, $lexeme:expr, $follow_token_name:expr, $follow_lexeme:expr) => {
         pub fn $name(scanner: &mut Scanner) {
             if let Some($follow_lexeme) = scanner.chars.peek() {
-                println!("{} {}{} null", $follow_token_name, $lexeme,$follow_lexeme);
+                println!("{} {}{} null", $follow_token_name, $lexeme, $follow_lexeme);
                 scanner.chars.next();
             } else {
                 println!("{} {} null", $token_name, $lexeme);
@@ -28,7 +25,7 @@ pub fn division(scanner: &mut Scanner) {
         scanner.chars.next();
         while let Some(&ch) = scanner.chars.peek() {
             if ch == '\n' {
-               break;
+                break;
             }
             scanner.chars.next();
         }
@@ -41,7 +38,7 @@ pub fn quotation(scanner: &mut Scanner) {
     let mut string_content = String::new();
     let mut flag = false;
     while let Some(ch) = scanner.chars.next() {
-        if ch == '"'{
+        if ch == '"' {
             flag = true;
             break;
         }
@@ -51,9 +48,29 @@ pub fn quotation(scanner: &mut Scanner) {
         string_content.push(ch);
     }
     if flag {
-        println!("STRING \"{}\" {}", string_content,string_content);
+        println!("STRING \"{}\" {}", string_content, string_content);
     } else {
-        eprintln!("[line {}] Error: Unterminated string.",scanner.line_num);
+        eprintln!("[line {}] Error: Unterminated string.", scanner.line_num);
         scanner.exit_code = ExitCode::Exit;
     }
+}
+
+pub fn number(scanner: &mut Scanner, c: char) {
+    let mut number = String::new();
+    number.push(c);
+    while let Some(&ch) = scanner.chars.peek() {
+        if ch.is_ascii_digit() || ch == '.' {
+            number.push(ch);
+            scanner.chars.next();
+        } else {
+            break;
+        }
+    }
+    let num = number.parse::<f64>().unwrap();
+    let formatted_number = if num.fract() == 0.0 {
+        format!("{:.1}", num)
+    } else {
+        format!("{}", num)
+    };
+    println!("NUMBER {} {}", number, formatted_number);
 }

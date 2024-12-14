@@ -1,6 +1,7 @@
-use std::{iter::Peekable, str::Chars};
 use crate::pkg::code::ExitCode;
+use std::{iter::Peekable, str::Chars};
 
+use crate::scan::handle;
 use crate::scan::lexemes::Lexemes;
 
 pub struct Scanner<'a> {
@@ -27,11 +28,22 @@ impl<'a> Scanner<'a> {
             if let Some(l) = Lexemes::from_char(c) {
                 l.execute(self);
             } else {
-                eprintln!("[line {}] Error: Unexpected character: {}", self.line_num, c);
-                self.exit_code = ExitCode::Exit;
+                self.process_non_lexeme(c);
             }
         }
         println!("EOF  null");
         self.exit_code.clone()
+    }
+
+    fn process_non_lexeme(&mut self, c: char) {
+        if c.is_ascii_digit() {
+            handle::number(self, c);
+        } else {
+            eprintln!(
+                "[line {}] Error: Unexpected character: {}",
+                self.line_num, c
+            );
+            self.exit_code = ExitCode::Exit;
+        }
     }
 }
